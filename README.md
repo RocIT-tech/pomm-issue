@@ -31,5 +31,5 @@ Add `127.0.0.1 local.pomm.issue` to your `/etc/hosts` then access to `http://loc
 
 # Mettre à jour les entitées
 ```bash
-$ ./vendor/bin/pomm.php pomm:generate:schema-all pomm_issue pomm --psr4 -d ./src/Persistence/Model/ -a "App\\\\Persistence\\\\Model"
+$ pomm pomm:generate:schema-all pomm_issue pomm --psr4 -d ./src/Persistence/Model/ -a "App\\\\Persistence\\\\Model"
 ```
