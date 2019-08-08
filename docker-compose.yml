@@ -1,0 +1,95 @@
+version: '3.7'
+services:
+    redis:
+        image: 'redis:5'
+        container_name: 'pomm_issue_redis'
+
+    postgres:
+        image: 'postgres:11.3'
+        volumes:
+            -
+                type: 'volume'
+                source: 'pomm_issue_postgres'
+                target: '/var/lib/postgresql/data'
+        tty: true
+        env_file:
+            - './postgres.env'
+        ports:
+            -
+                target: 5432
+                published: 5432
+        container_name: 'pomm_issue_postgres'
+
+    php:
+        user: 'app'
+        working_dir: '/var/www/html'
+        env_file:
+            - './php.env'
+        depends_on:
+            - 'postgres'
+            - 'redis'
+        tty: true
+        image: 'rocit/php:pomm_issue-php'
+        build:
+            context: './docker/php'
+            target: 'php'
+            args:
+                ENABLE_BLACKFIRE: 'true'
+                ENABLE_XDEBUG: 'true'
+        volumes:
+            -
+                type: 'bind'
+                source: './'
+                target: '/var/www/html'
+                consistency: 'delegated'
+        container_name: 'pomm_issue_php'
+
+    composer:
+        image: 'rocit/php:pomm_issue-composer'
+        build:
+            context: './docker/php'
+            target: 'composer'
+            args:
+                ENABLE_BLACKFIRE: 'false'
+                ENABLE_XDEBUG: 'false'
+        user: 'app'
+        working_dir: '/var/www/html'
+        env_file:
+            - './php.env'
+        depends_on:
+            - 'postgres'
+            - 'redis'
+        tty: true
+        volumes:
+            -
+                type: 'bind'
+                source: './'
+                target: '/var/www/html'
+                consistency: 'delegated'
+            - '~/.ssh:/var/www/.ssh:ro'                   # For composer
+            - '~/.composer:/home/app/.composer:delegated' # For composer
+        container_name: 'pomm_issue_composer'
+
+    nginx:
+        image: 'rocit/nginx:1.17-symfony4'
+        working_dir: '/var/www/html'
+        env_file:
+            - './nginx.env'
+        ports:
+            -
+                target: 80
+                published: 80
+                mode: 'host'
+        depends_on:
+            - 'php'
+        tty: true
+        volumes:
+            -
+                type: 'bind'
+                source: './'
+                target: '/var/www/html'
+                consistency: 'delegated'
+        container_name: 'pomm_issue_nginx'
+
+volumes:
+    pomm_issue_postgres:
