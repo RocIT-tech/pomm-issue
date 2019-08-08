@@ -29,6 +29,36 @@ Add `127.0.0.1 local.pomm.issue` to your `/etc/hosts` then access to `http://loc
 ## Result
 :warning: *I do not see any `city` field.*
 
+## Generated SQL
+The generated SQL looks like this:
+```sql
+SELECT
+    country."country_id" AS "country_id",
+    country."name"       AS "name",
+    (
+        SELECT
+            ARRAY_AGG(province)
+            FROM
+                (
+                    SELECT
+                        province."province_id" AS "province_id",
+                        province."name"        AS "name",
+                        province."country_id"  AS "country_id",
+                        city                   AS "city"
+                        FROM
+                            pomm.province province
+                            INNER JOIN pomm.city city
+                                       USING (province_id)
+                ) AS province
+    )                    AS "province"
+    FROM
+        pomm.country country
+        LEFT JOIN pomm.province province
+                  USING (country_id)
+    GROUP BY
+        country_id;
+```
+
 # Mettre à jour les entitées
 ```bash
 $ pomm pomm:generate:schema-all pomm_issue pomm --psr4 -d ./src/Persistence/Model/ -a "App\\\\Persistence\\\\Model"
