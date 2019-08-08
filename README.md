@@ -44,11 +44,12 @@ SELECT
                         province."province_id" AS "province_id",
                         province."name"        AS "name",
                         province."country_id"  AS "country_id",
-                        city                   AS "city"
+                        ARRAY_AGG(city)        AS "city"
                         FROM
                             pomm.province province
                             INNER JOIN pomm.city city
                                        USING (province_id)
+                        GROUP BY province_id
                 ) AS province
     )                    AS "province"
     FROM

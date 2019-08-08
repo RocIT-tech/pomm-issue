@@ -51,6 +51,7 @@ FROM
         SELECT :projection
         FROM :province province
         INNER JOIN :city city USING (province_id)
+        GROUP BY province_id
     ) AS province
 EOF;
 
@@ -64,7 +65,7 @@ EOF;
         $cityModel = $session->getModel(CityModel::class);
 
         $provinceProjection = $provinceModel->createProjection();
-        $provinceProjection->setField('city', 'city', City::class);
+        $provinceProjection->setField('city', 'ARRAY_AGG(city)', sprintf('%s[]', City::class));
 
         $provinceSql = strtr(
             $provinceSql,
