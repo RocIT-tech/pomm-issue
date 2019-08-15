@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "507953aa1ed524bd608ac385c209d36b",
+    "content-hash": "7ddc9a81e2def7f6ac3af62b2284be77",
     "packages": [
         {
             "name": "pomm-project/cli",
@@ -64,33 +64,43 @@
         },
         {
             "name": "pomm-project/foundation",
-            "version": "2.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pomm-project/Foundation.git",
-                "reference": "c76bf93cbfc296b1749e480094253b080ae80492"
+                "url": "https://github.com/artjomsimon/Foundation.git",
+                "reference": "acb2c9f049c499c1544cf957e3aef61252fe75f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pomm-project/Foundation/zipball/c76bf93cbfc296b1749e480094253b080ae80492",
-                "reference": "c76bf93cbfc296b1749e480094253b080ae80492",
+                "url": "https://api.github.com/repos/artjomsimon/Foundation/zipball/acb2c9f049c499c1544cf957e3aef61252fe75f1",
+                "reference": "acb2c9f049c499c1544cf957e3aef61252fe75f1",
                 "shasum": ""
             },
             "require": {
                 "ext-pgsql": "*",
-                "php": ">=5.4.4",
+                "php": ">=5.5.9",
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "atoum/atoum": "^2.8 || ^3.0"
+                "atoum/atoum": "^2.8 || ^3.0",
+                "squizlabs/php_codesniffer": "~2.8"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "PommProject\\Foundation\\": "sources/lib"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "PommProject\\Foundation\\Test\\": "sources/tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -109,7 +119,10 @@
                 "pomm",
                 "postgresql"
             ],
-            "time": "2019-02-20T20:44:37+00:00"
+            "support": {
+                "source": "https://github.com/artjomsimon/Foundation/tree/master"
+            },
+            "time": "2019-08-04T14:31:48+00:00"
         },
         {
             "name": "pomm-project/model-manager",
@@ -645,7 +658,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "pomm-project/foundation": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
