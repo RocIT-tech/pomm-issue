@@ -5,7 +5,8 @@ services:
         container_name: 'pomm_issue_redis'
 
     postgres:
-        image: 'postgres:11.3'
+        image: 'postgres:9.1'
+#        image: 'postgres:11.3'
         volumes:
             -
                 type: 'volume'
